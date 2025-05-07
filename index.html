@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resume Builder</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <h2>Enter Your Resume Information</h2>
+  <form id="resumeForm">
+    <label>Full Name:</label><br>
+    <input type="text" id="fullName" required><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" id="email" required><br><br>
+
+    <label>Phone:</label><br>
+    <input type="text" id="phone"><br><br>
+
+    <label>Education:</label><br>
+    <textarea id="education"></textarea><br><br>
+
+    <label>Experience:</label><br>
+    <textarea id="experience"></textarea><br><br>
+
+    <label>Skills:</label><br>
+    <textarea id="skills"></textarea><br><br>
+
+    <button type="button" onclick="generatePreview()">Preview</button>
+    <button type="button" onclick="downloadPDF()">Download PDF</button>
+  </form>
+
+  <div id="preview" style="margin-top: 30px;"></div>
+
+  <script>
+    function generatePreview() {
+      const name = document.getElementById("fullName").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+      const education = document.getElementById("education").value;
+      const experience = document.getElementById("experience").value;
+      const skills = document.getElementById("skills").value;
+
+      const preview = `
+        <h3>Resume Preview</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Education:</strong> ${education}</p>
+        <p><strong>Experience:</strong> ${experience}</p>
+        <p><strong>Skills:</strong> ${skills}</p>
+      `;
+      document.getElementById("preview").innerHTML = preview;
+    }
+
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const name = document.getElementById("fullName").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+      const education = document.getElementById("education").value;
+      const experience = document.getElementById("experience").value;
+      const skills = document.getElementById("skills").value;
+
+      let y = 10;
+      doc.setFontSize(16);
+      doc.text("Resume", 10, y);
+      doc.setFontSize(12);
+
+      y += 10;
+      doc.text(`Name: ${name}`, 10, y);
+      y += 10;
+      doc.text(`Email: ${email}`, 10, y);
+      y += 10;
+      doc.text(`Phone: ${phone}`, 10, y);
+      y += 10;
+      doc.text("Education:", 10, y);
+      y += 10;
+      doc.text(education, 15, y);
+      y += 20;
+      doc.text("Experience:", 10, y);
+      y += 10;
+      doc.text(experience, 15, y);
+      y += 20;
+      doc.text("Skills:", 10, y);
+      y += 10;
+      doc.text(skills, 15, y);
+
+      doc.save("resume.pdf");
+    }
+  </script>
+</body>
+</html>
